@@ -48,7 +48,4 @@ resource "aws_instance" "foo" {
     device_index         = 0
   }
 
-  credit_specification {
-    cpu_credits = "unlimited"
-  }
 }
