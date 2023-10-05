@@ -5,6 +5,12 @@ terraform {
       version = "~> 4.0"
     }
   }
+  backend "s3" {
+    bucket         = "devops-ej1"
+    key            = "terraform.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "remote-state"
+  }
 }
 
 # Configure the AWS Provider

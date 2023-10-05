@@ -12,12 +12,14 @@ data "aws_ami" "rhel" {
 }
 
 resource "aws_instance" "public" {
+  count                       = 2
   ami                         = data.aws_ami.rhel.id
   associate_public_ip_address = true
   instance_type               = "t2.micro"
   key_name                    = "main"
   vpc_security_group_ids      = [aws_security_group.public.id]
-  subnet_id                   = aws_subnet.public[0].id
+  subnet_id                   = aws_subnet.public[count.index].id
+  user_data                   = file("user-data.sh")
 
   tags = {
     Name = "${var.env_code}-public"
@@ -36,6 +38,23 @@ resource aws_security_group "public" {
           protocol    = "tcp"
           cidr_blocks = ["147.161.234.174/32"]
         }
+
+        ingress {
+          description = "HTTP from public"
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["147.161.234.174/32"]
+        }
+
+        ingress {
+          description     = "HTTP from load balancer"
+          from_port       = 80
+          to_port         = 80
+          protocol        = "tcp"
+          security_groups = [aws_security_group.load_balancer.id]
+        }
+
         egress {
           description = "Everything"
           from_port   = 0
