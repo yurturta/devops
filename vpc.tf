@@ -61,12 +61,22 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_eip" "nat" {
-  count = length(var.public_cidr)
-  vpc = true
+  count             = length(var.public_cidr)
+  domain            = "vpc"
 
   tags = {
     Name = "${var.env_code}-nat${count.index+1}"
   }
+
+}
+
+resource "aws_eip" "nat2" {
+  #  count             = length(var.public_cidr)
+  domain            = "vpc"
+
+  #  tags = {
+  #    Name = "${var.env_code}-nat${count.index+1}"
+  #  }
 
 }
 
