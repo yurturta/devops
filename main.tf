@@ -9,6 +9,7 @@ terraform {
 
 # Configure the AWS Provider test rebase
 # Main
+# Main 2
 provider "aws" {
   region = "eu-central-1"
 }
